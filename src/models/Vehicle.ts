@@ -1,4 +1,4 @@
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
+import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { Customer } from "./Customer";
 
 class Vehicle {
@@ -20,8 +20,8 @@ class Vehicle {
   @prop({ required: true })
   model!: string;
 
-  @prop({ required: true })
-  chassis!: string;
+  @prop({ required: false })
+  chassis?: string;
 
   @prop({ required: true })
   color!: string;

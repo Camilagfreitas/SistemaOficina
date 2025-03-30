@@ -1,14 +1,10 @@
-import { VehicleModel, Vehicle } from "../models/Vehicle";
-import { CustomerModel } from "../models/Customer";
 import { Types } from "mongoose";
+import { CustomerModel } from "../models/Customer";
+import { Vehicle, VehicleModel } from "../models/Vehicle";
 
 class VehicleService {
   static async createVehicle(vehicleData: Partial<Vehicle>) {
     const { owner, plate, chassis } = vehicleData;
-
-    if (owner && !Types.ObjectId.isValid(owner._id)) {
-      throw new Error("ID de cliente inválido");
-    }
 
     try {
         const existingCustomer = await CustomerModel.findById(owner);

@@ -1,10 +1,12 @@
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
-import { Types } from "mongoose";
-import { Vehicle } from "./Vehicle"; 
+import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
+import { Vehicle } from "./Vehicle";
 
 class Customer {
   @prop({ required: true })
   name!: string;
+
+  @prop({ required: true })
+  lastname!: string;
 
   @prop({required: true})
   phone!: string;

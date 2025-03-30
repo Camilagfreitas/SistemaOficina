@@ -5,6 +5,9 @@ class User {
   @prop({ required: true })
   name!: string;
 
+  @prop({ required: true })
+  lastname!: string;
+
   @prop()
   birthDate!: string;
 

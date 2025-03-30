@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { connectDB } from "./database";
 import userRoutes from "./routes/userRoutes";
 import customerRoutes from "./routes/customerRoutes";
@@ -10,6 +11,7 @@ import serviceOrderRoutes from "./routes/serviceOrderRoutes";
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/users", userRoutes);

@@ -19,7 +19,8 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const { token, user } = await UserService.login(email, password);
-    res.json({ token, user });
+    const name = user.name;
+    res.json({ token, name });
   } catch (error) {
     res.status(401).json({ error: (error as Error).message });
   }
@@ -36,7 +37,7 @@ router.get('/getById/:id',protect, async (req, res) => {
 });
 
 // Listar todos os usuários
-router.get('/getAll/', protect, async (req, res) => {
+router.get('/getAll', protect, async (req, res) => {
   try {
     const users = await UserService.getAllUsers();
     res.json(users);

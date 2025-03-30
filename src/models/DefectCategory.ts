@@ -1,8 +1,8 @@
-import { prop, modelOptions, getModelForClass } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 
 @modelOptions({ schemaOptions: { collection: "defectsCategories" } })
 export class DefectCategory {
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   name!: string;
 
   @prop()
