@@ -1,11 +1,11 @@
 import express from 'express';
-import UserService from '../services/UserService';
 import { protect } from '../middlewares/authMiddleware';
+import UserService from '../services/UserService';
 
 const router = express.Router();
 
 // Criar usuário
-router.post('/register', protect, async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const user = await UserService.createUser(req.body);
     res.status(201).json(user);
@@ -37,7 +37,7 @@ router.get('/getById/:id',protect, async (req, res) => {
 });
 
 // Listar todos os usuários
-router.get('/getAll', protect, async (req, res) => {
+router.get('/getAll', protect, async (_req, res) => {
   try {
     const users = await UserService.getAllUsers();
     res.json(users);

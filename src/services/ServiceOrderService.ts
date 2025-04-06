@@ -1,9 +1,8 @@
-import { ServiceOrderModel } from "../models/ServiceOrder";
-import { PartModel } from "../models/Part";
-import { VehicleModel } from "../models/Vehicle";
-import { UserModel } from "../models/User";
 import { DefectCategoryModel } from "../models/DefectCategory";
 import { InventoryModel } from "../models/Inventory";
+import { ServiceOrderModel } from "../models/ServiceOrder";
+import { UserModel } from "../models/User";
+import { VehicleModel } from "../models/Vehicle";
 
 class ServiceOrderService {
     static async createServiceOrder(serviceOrderData: any) {
@@ -55,20 +54,34 @@ class ServiceOrderService {
 
 static async getAllServiceOrders(filter: any = {}) {
     return await ServiceOrderModel.find(filter).populate([
-      { path: "vehicle" },
+      {
+        path: "vehicle",
+        populate: { path: "customer" },
+      },
       { path: "user" },
-      { path: "services.category" },
-      { path: "services.details.part" }
+      { path: "services",
+        populate: { path: "category" },
+       },
+       { path: "services",
+        populate: { path: "details.part" },
+       },
     ]);
   }
   
 
   static async getServiceOrderById(serviceOrderId: string) {
-    const serviceOrder = await ServiceOrderModel.findById(serviceOrderId).populate([
-      { path: "vehicle" },
+    const serviceOrder = await ServiceOrderModel.findById(serviceOrderId).populate([ 
+      {
+        path: "vehicle",
+        populate: { path: "customer" },
+      },
       { path: "user" },
-      { path: "services.category" },
-      { path: "services.details.part" }
+      { path: "services",
+        populate: { path: "category" },
+       },
+       { path: "services.details",
+        populate: { path: "part" },
+       },
     ]);
 
     if (!serviceOrder) {

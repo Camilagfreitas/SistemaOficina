@@ -12,7 +12,7 @@ router.post("/register/", async (req, res) => {
   }
 });
 
-router.get("/getAll/", async (req, res) => {
+router.get("/getAll/", async (_req, res) => {
   try {
     const inventories = await InventoryService.getAllInventories();
     res.status(200).json(inventories);
@@ -65,5 +65,22 @@ router.delete("/:inventoryId/deletePart/:partId", async (req, res) => {
     res.status(400).json({ error: (error as Error).message });
   }
 });
+
+router.put("/:inventoryId/updatePartsBatch", async (req, res) => {
+  try {
+    const { services } = req.body; 
+
+    for (const service of services) {
+      for (const part of service.parts) {
+        await InventoryService.updatePartQuantity(service.inventoryId, part.code, part.quantity);
+      }
+    }
+
+    res.status(200).json({ message: "Inventário atualizado com sucesso!" });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+});
+
 
 export default router;

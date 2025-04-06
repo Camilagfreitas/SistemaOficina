@@ -1,4 +1,4 @@
-import { InventoryModel, Inventory, InventoryItem } from "../models/Inventory";
+import { Inventory, InventoryItem, InventoryModel } from "../models/Inventory";
 import { PartModel } from "../models/Part";
 
 class InventoryService {
@@ -47,7 +47,7 @@ class InventoryService {
     return updatedInventory;
   }
 
-  static async updatePartQuantity(inventoryId: string, partId: string, quantity: number) {
+  static async updatePartQuantity(inventoryId: string, partId: string, quantityToDecrement: number) {
     const inventory = await InventoryModel.findById(inventoryId);
     if (!inventory) {
       throw new Error("Inventário não encontrado");
@@ -55,13 +55,18 @@ class InventoryService {
 
     const part = inventory.parts.find((item: InventoryItem) => item.part.toString() === partId);
     if (!part) {
-      throw new Error("Parte não encontrada no inventário");
+      throw new Error("Peça não encontrada no inventário");
     }
 
-    part.quantity = quantity;
+    if (part.quantity < quantityToDecrement) {
+      throw new Error("Quantidade insuficiente no inventário");
+    }
+
+    part.quantity -= quantityToDecrement; // Decrementa a quantidade
     await inventory.save();
+    
     return inventory;
-  }
+}
 
   static async deletePartFromInventory(inventoryId: string, partId: string) {
     const inventory = await InventoryModel.findById(inventoryId);

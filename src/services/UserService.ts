@@ -1,17 +1,17 @@
-import { UserModel, User } from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { User, UserModel } from '../models/User';
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 class UserService {
   static async createUser(userData: Partial<User>) {
-    const { email, password, role } = userData;
+    const { email, password, login, role } = userData;
 
-    const existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email }) || UserModel.findOne({ login }) ;
     if (existingUser) {
-      throw new Error('Email já cadastrado');
+      throw new Error('Email ou login já cadastrado');
     }
     const hashedPassword = await bcrypt.hash(password!, SALT_ROUNDS);
 
@@ -24,8 +24,8 @@ class UserService {
     return newUser;
   }
 
-  static async login(email: string, password: string) {
-    const user = await UserModel.findOne({ email });
+  static async login(login: string, password: string) {
+    const user = await UserModel.findOne({ login });
     if (!user) {
       throw new Error('Usuário não encontrado');
     }

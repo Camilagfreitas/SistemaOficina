@@ -6,7 +6,7 @@ class Vehicle {
   plate!: string;
 
   @prop({ required: true, ref: 'Customer' }) 
-  owner!: Ref<Customer>;
+  customer!: Ref<Customer>;
 
   @prop({ required: true })
   mileage!: number;

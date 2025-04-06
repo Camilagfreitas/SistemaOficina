@@ -1,7 +1,8 @@
-import { prop, modelOptions, getModelForClass, Ref } from "@typegoose/typegoose";
-import { Vehicle } from "./Vehicle";
-import { User } from "./User";
+import { getModelForClass, modelOptions, prop, Ref } from "@typegoose/typegoose";
 import { DefectCategory } from "./DefectCategory";
+import { Part } from "./Part";
+import { User } from "./User";
+import { Vehicle } from "./Vehicle";
 
 class ServiceDetails {
   @prop({ required: true })
@@ -10,16 +11,13 @@ class ServiceDetails {
   @prop({ required: true })
   price!: number;
 
-  @prop({ required: true })
-  part!: string;
+  @prop({ required: true, ref: "Part" })
+  part!: Ref<Part>;
 }
 
 class Service {
   @prop({ required: true, ref: "DefectCategory" }) 
   category!: Ref<DefectCategory>;
-
-  @prop({ required: true })
-  totalPrice!: number;
 
   @prop({ required: true, type: () => [ServiceDetails] })
   details!: ServiceDetails[];
@@ -38,6 +36,9 @@ class ServiceOrder {
 
   @prop({ required: true, type: () => [Service] })
   services!: Service[];
+  
+  @prop({ required: true })
+  totalPrice!: number;
 
   @prop()
   deletedAt?: Date;

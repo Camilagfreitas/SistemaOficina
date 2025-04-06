@@ -4,10 +4,10 @@ import { Vehicle, VehicleModel } from "../models/Vehicle";
 
 class VehicleService {
   static async createVehicle(vehicleData: Partial<Vehicle>) {
-    const { owner, plate, chassis } = vehicleData;
+    const { customer, plate, chassis } = vehicleData;
 
     try {
-        const existingCustomer = await CustomerModel.findById(owner);
+        const existingCustomer = await CustomerModel.findById(customer);
         const existingPlate = await VehicleModel.findOne({ plate });
         const existingChassis = await VehicleModel.findOne({ chassis });
 
@@ -23,7 +23,7 @@ class VehicleService {
 
       const newVehicle = await VehicleModel.create({
         ...vehicleData,
-        owner: existingCustomer._id 
+        customer: existingCustomer._id 
       });
       return newVehicle;
     } catch (err) {
@@ -35,7 +35,7 @@ class VehicleService {
   }
 
   static async getAllVehicles() {
-    return await VehicleModel.find().populate('owner');
+    return await VehicleModel.find().populate('customer');
   }
 
   static async getVehicleById(vehicleId: string) {
@@ -47,19 +47,19 @@ class VehicleService {
   }
 
   static async updateVehicle(vehicleId: string, updateData: Partial<Vehicle>) {
-    const { owner } = updateData;
+    const { customer } = updateData;
 
-    if (owner && !Types.ObjectId.isValid(owner._id)) {
+    if (customer && !Types.ObjectId.isValid(customer._id)) {
       throw new Error("ID de cliente inválido");
     }
 
-    if (owner) {
-      const customerExists = await CustomerModel.findById(owner);
+    if (customer) {
+      const customerExists = await CustomerModel.findById(customer);
       if (!customerExists) {
         throw new Error("Cliente não encontrado");
       }
 
-      updateData.owner = customerExists._id;
+      updateData.customer = customerExists._id;
     }
 
     const updatedVehicle = await VehicleModel.findByIdAndUpdate(vehicleId, updateData, { new: true });
