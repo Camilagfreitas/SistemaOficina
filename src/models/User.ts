@@ -1,5 +1,5 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 class User {
   @prop({ required: true })
