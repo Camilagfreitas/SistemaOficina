@@ -72,7 +72,7 @@ router.put("/:inventoryId/updatePartsBatch", async (req, res) => {
 
     for (const service of services) {
       for (const part of service.parts) {
-        await InventoryService.updatePartQuantity(service.inventoryId, part.code, part.quantity);
+        await InventoryService.decrementPartQuantity(service.inventoryId, part.code, part.quantity);
       }
     }
 

@@ -47,7 +47,7 @@ class InventoryService {
     return updatedInventory;
   }
 
-  static async updatePartQuantity(inventoryId: string, partId: string, quantityToDecrement: number) {
+  static async decrementPartQuantity(inventoryId: string, partId: string, quantityToDecrement: number) {
     const inventory = await InventoryModel.findById(inventoryId);
     if (!inventory) {
       throw new Error("Inventário não encontrado");
@@ -76,6 +76,24 @@ class InventoryService {
 
     inventory.parts = inventory.parts.filter((item: InventoryItem) => item.part.toString() !== partId);
     await inventory.save();
+    return inventory;
+  }
+
+  static async updatePartQuantity(inventoryId: string, partId: string, newQuantity: number) {
+    const inventory = await InventoryModel.findById(inventoryId);
+    if (!inventory) {
+      throw new Error("Inventário não encontrado");
+    }
+  
+    const part = inventory.parts.find((item: InventoryItem) => item.part.toString() === partId);
+    if (!part) {
+      throw new Error("Peça não encontrada no inventário");
+    }
+  
+    part.quantity = newQuantity;
+  
+    await inventory.save();
+  
     return inventory;
   }
 }

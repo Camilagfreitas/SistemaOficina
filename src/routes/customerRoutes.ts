@@ -48,4 +48,15 @@ router.delete("/delete/:id", protect, async (req, res) => {
   }
 });
 
+router.get("/details/:customerId", async (req, res) => {
+  try {
+    const customerId = req.params.customerId;
+    const customerDetails = await CustomerService.getCustomerFullDetails(customerId);
+    res.json(customerDetails); 
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+});
+
+
 export default router;
