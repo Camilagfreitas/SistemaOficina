@@ -9,10 +9,15 @@ class UserService {
   static async createUser(userData: Partial<User>) {
     const { email, password, login, role } = userData;
 
-    const existingUser = await UserModel.findOne({ email }) || UserModel.findOne({ login }) ;
-    if (existingUser) {
-      throw new Error('Email ou login já cadastrado');
+    const [userWithEmail, userWithLogin] = await Promise.all([
+      UserModel.findOne({ email }),
+      UserModel.findOne({ login }),
+    ]);
+    
+    if (userWithEmail || userWithLogin) {
+      throw new Error(`Email ou login já cadastrado: ${userWithEmail}, ${userWithLogin}`);
     }
+
     const hashedPassword = await bcrypt.hash(password!, SALT_ROUNDS);
 
     const newUser = await UserModel.create({
