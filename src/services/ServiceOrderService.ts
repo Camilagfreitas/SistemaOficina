@@ -70,25 +70,43 @@ static async getAllServiceOrders(filter: any = {}) {
   
 
   static async getServiceOrderById(serviceOrderId: string) {
-    const serviceOrder = await ServiceOrderModel.findById(serviceOrderId).populate([ 
+    const serviceOrder = await ServiceOrderModel.findById(serviceOrderId).populate([
       {
         path: "vehicle",
         populate: { path: "customer" },
       },
       { path: "user" },
-      { path: "services",
+      {
+        path: "services",
         populate: { path: "category" },
-       },
-       { path: "services.details",
+      },
+      {
+        path: "services.details",
         populate: { path: "part" },
-       },
+      },
     ]);
-
+  
     if (!serviceOrder) {
       throw new Error("Ordem de serviço não encontrada");
     }
-
-    return serviceOrder;
+  
+    const serviceOrderObj = serviceOrder.toObject(); 
+  
+    serviceOrderObj.services = serviceOrderObj.services.map((service: any) => {
+      const detailsWithPart = service.details || [];
+  
+      const reorderedDetails = [
+        ...detailsWithPart.filter((d: any) => d.part?.code !== "1"),
+        ...detailsWithPart.filter((d: any) => d.part?.code === "1"),
+      ];
+  
+      return {
+        ...service,
+        details: reorderedDetails,
+      };
+    });
+  
+    return serviceOrderObj;
   }
 
   static async updateServiceOrder(serviceOrderId: string, updateData: any) {
