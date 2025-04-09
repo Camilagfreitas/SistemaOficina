@@ -11,8 +11,8 @@ class Customer {
   @prop({required: true})
   phone!: string;
 
-  @prop({ unique: true, required: true })
-  email!: string;
+  @prop({ unique: true })
+  email?: string;
 
   @prop({ required: true })
   document!: string;

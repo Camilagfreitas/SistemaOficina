@@ -5,14 +5,9 @@ import { ServiceOrderModel } from "../models/ServiceOrder";
 
 class CustomerService {
   static async createCustomer(customerData: Partial<Customer>) {
-    const { email, document } = customerData;
+    const {  document } = customerData;
 
-    const existingEmail = await CustomerModel.findOne({ email });
     const existingDocument = await CustomerModel.findOne({ document });
-
-    if (existingEmail) {
-      throw new Error("Email já cadastrado");
-    }
 
     if (existingDocument) {
       throw new Error("Documento já cadastrado");
