@@ -1,15 +1,16 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+export const PORT = process.env.PORT || 3000;
 
-dotenv.config();
-
-const MONGO_URI = process.env.MONGO_URI as string;
-
-export async function connectDB() {
+export const connectDB = async () => {
+  const mongoose = require('mongoose');
   try {
-    await mongoose.connect(MONGO_URI);
-    console.log("✅ Conectado ao MongoDB Atlas!");
-  } catch (error) {
-    console.error("❌ Erro ao conectar no MongoDB:", error);
+    const mongoUri = process.env.MONGO_URI;
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("🔌 Conectado ao MongoDB com sucesso!");
+  } catch (err) {
+    console.error("❌ Erro ao conectar ao MongoDB", err);
+    process.exit(1);
   }
-}
+};

@@ -15,7 +15,7 @@ class User {
   email!: string;
 
   @prop({ required: true })
-  document!: number;
+  document!: string;
 
   @prop({ required: true })
   phone!: number;
